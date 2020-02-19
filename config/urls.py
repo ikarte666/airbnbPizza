@@ -9,6 +9,7 @@ urlpatterns = [
     ),  #  기본 경로에 core.urls파일을 연결, namespace는 해당 파일의 app_name과 동일
     path("admin/", admin.site.urls),
     path("rooms/", include("rooms.urls", namespace="rooms")),
+    path("users/", include("users.urls", namespace="users")),
 ]
 
 if settings.DEBUG:

@@ -1,7 +1,8 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View
 from django.shortcuts import render
+from django.core.paginator import Paginator
 from django_countries import countries
-from . import models
+from . import models, forms
 
 
 class HomeView(ListView):
@@ -9,7 +10,7 @@ class HomeView(ListView):
     """HomeView Definition"""
 
     model = models.Room
-    paginate_by = 10
+    paginate_by = 12
     paginate_orphans = 5
     ordering = "created"
     context_object_name = "rooms"
@@ -20,100 +21,72 @@ class RoomDetail(DetailView):
     model = models.Room
 
 
-def search(request):
-    city = request.GET.get("city", "Anywhere")
-    city = str.capitalize(city)
-    country = request.GET.get("country", "KR")
-    room_type = int(request.GET.get("room_type", 0))  #  현재 룸 타입
-    price = int(request.GET.get("price", 0))
-    guests = int(request.GET.get("guests", 0))
-    bedrooms = int(request.GET.get("bedrooms", 0))
-    beds = int(request.GET.get("beds", 0))
-    baths = int(request.GET.get("baths", 0))
-    instant = bool(request.GET.get("instant", False))
-    superhost = bool(request.GET.get("superhost", False))
-    s_amenities = request.GET.getlist("amenities")
-    s_facilities = request.GET.getlist("facilities")
-    s_rules = request.GET.getlist("house_rules")
+class SearchView(View):
+    def get(self, request):
+        country = request.GET.get("country")
+        filter_args = {}
+        qs = models.Room.objects.filter()
 
-    form = {
-        "city": city,
-        "s_room_type": room_type,
-        "s_country": country,
-        "s_amenities": s_amenities,
-        "s_facilities": s_facilities,
-        "s_rules": s_rules,
-        "price": price,
-        "guests": guests,
-        "bedrooms": bedrooms,
-        "beds": beds,
-        "baths": baths,
-        "instant": instant,
-        "superhost": superhost,
-    }
+        if country:
+            form = forms.SearchForm(request.GET)
+            if form.is_valid():
+                city = form.cleaned_data.get("city")
+                country = form.cleaned_data.get("country")
+                room_type = form.cleaned_data.get("room_type")
+                price = form.cleaned_data.get("price")
+                guests = form.cleaned_data.get("guests")
+                bedrooms = form.cleaned_data.get("bedrooms")
+                beds = form.cleaned_data.get("beds")
+                baths = form.cleaned_data.get("baths")
+                instant_book = form.cleaned_data.get("instant_book")
+                superhost = form.cleaned_data.get("superhost")
+                amenities = form.cleaned_data.get("amenities")
+                facilities = form.cleaned_data.get("facilities")
 
-    room_types = models.RoomType.objects.all()  #  모든 룸 타입
-    amenities = models.Amenity.objects.all()
-    facilities = models.Facility.objects.all()
-    house_rules = models.HouseRule.objects.all()
+                filter_args = {}  #  필터링 인자 dictionary
 
-    choices = {
-        "countries": countries,
-        "room_types": room_types,
-        "amenities": amenities,
-        "facilities": facilities,
-        "house_rules": house_rules,
-    }
+                #  필터링 조건 추가
+                if city != "Anywhere":
+                    filter_args["city__startswith"] = city
 
-    filter_args = {}  #  필터링 인자 dictionary
+                filter_args["country"] = country
 
-    #  필터링 조건 추가
-    if city != "Anywhere":
-        filter_args["city__startswith"] = city
+                if room_type is not None:
+                    filter_args["room_type"] = room_type
 
-    filter_args["country"] = country
+                if price is not None:
+                    filter_args["price__lte"] = price
 
-    if room_type != 0:
-        filter_args["room_type__pk__exact"] = room_type
+                if guests is not None:
+                    filter_args["guests__gte"] = guests
 
-    if price > 0:
-        filter_args["price__lte"] = price
+                if bedrooms is not None:
+                    filter_args["beds__gte"] = beds
 
-    if guests > 0:
-        filter_args["guests__gte"] = guests
+                if baths is not None:
+                    filter_args["bath__gte"] = baths
 
-    if bedrooms > 0:
-        filter_args["beds__gte"] = beds
+                if instant_book is True:
+                    filter_args["instant_book"] = True
 
-    if baths > 0:
-        filter_args["bath__gte"] = baths
+                if superhost is True:
+                    filter_args["host__superhost"] = True
 
-    if instant is True:
-        filter_args["instant_book"] = True
+                qs = models.Room.objects.filter(**filter_args).order_by("-created")
 
-    if superhost is True:
-        filter_args["host__superhost"] = True
+                paginator = Paginator(qs, 10, orphans=5)
 
-    rooms = models.Room.objects.filter(**filter_args)
+                page = request.GET.get("page", 1)
 
-    if len(s_amenities) > 0:
-        for s_amenity in s_amenities:
-            rooms = rooms.filter(amenities__pk=int(s_amenity))
+                rooms = paginator.get_page(page)
 
-    if len(s_facilities) > 0:
-        for s_facility in s_facilities:
-            rooms = rooms.filter(facilities__pk=int(s_facility))
+                for amenity in amenities:
+                    qs = qs.filter(amenities=amenity)
 
-    #  필터링 조건 추가 끝
-    #  필터링 결과를 rooms에 담아서 context로 보냄
+                for facility in facilities:
+                    qs = qs.filter(facilities=facility)
 
-    return render(request, "rooms/search.html", {**form, **choices, "rooms": rooms},)
+        else:
+            form = forms.SearchForm()
 
-
-# FBV
-# def room_detail(request, pk):
-#     try:
-#         room = models.Room.objects.get(pk=pk)
-#         return render(request, "rooms/detail.html", {"room": room})
-#     except models.Room.DoesNotExist:
-#         raise Http404()
+        return render(request, "rooms/search.html", {"form": form, "qs": qs},)
