@@ -23,11 +23,26 @@
     @apply text-center rounded-sm py-5 font-light text-lg w-full;
 }
 
-input {
+.btn-link {
+    @apply text-center py-3 rounded-lg font-light text-lg w-full text-white bg-red-500;
+}
+
+input,
+textarea,
+select {
     @apply text-left border border-gray-600 px-5 rounded-sm py-5 font-light text-lg w-full;
     &:focus {
         @apply border-teal-500 outline-none;
     }
+}
+
+select {
+    height: 50px;
+}
+
+textarea {
+    resize: none;
+    height: 100px;
 }
 
 form {
@@ -96,6 +111,17 @@ form {
     &.warning {
         @apply bg-yellow-400;
     }
+}
+
+.border-section {
+    @apply border-b border-gray-400 pb-8 mt-8;
+}
+
+.cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 10px;
+    justify-items: center;
 }
 
 @tailwind utilities;
