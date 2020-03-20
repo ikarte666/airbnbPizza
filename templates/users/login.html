@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block page_title %}
-Log In
+{% trans 'Log In' %}
 {% endblock page_title %}
 
 {% block search-bar %}
@@ -14,8 +14,8 @@ Log In
     {% include 'partials/auth_form.html' with form=form cta="Log in" %}
 
     <div class="mt-5">
-        <span>Don't have an account?</span>
-        <a href="{% url 'users:signup' %}" class="text-teal-500 font-bold">Sign up!</a>
+        <span>{% trans "Don't have an account?" %}</span>
+        <a href="{% url 'users:signup' %}" class="text-teal-500 font-bold">{% trans 'Sign up!' %}</a>
     </div>
 </div>
 {% endblock content %}

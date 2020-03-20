@@ -64,6 +64,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -149,3 +150,9 @@ EMAIL_FROM = "airbnb@sandbox7a58bb76f99547a99e81e89e003cca11.mailgun.org"
 
 # Auth
 LOGIN_URL = "/users/login"
+
+
+# Locale
+
+LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
+
