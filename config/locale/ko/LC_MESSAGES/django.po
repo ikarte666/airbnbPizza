@@ -1,0 +1,120 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-03-16 20:22+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: .\templates\base.html:25
+msgid "Search by City"
+msgstr "도시로 검색하기"
+
+#: .\templates\partials\footer.html:5
+msgid "Please don't copy us."
+msgstr "복제는 다메다요"
+
+#: .\templates\partials\footer.html:8
+msgid "All rights reserved."
+msgstr "모든 권리는 나에게 있다 엌ㅋㅋ"
+
+#: .\templates\partials\nav.html:7
+msgid "Stop Hosting"
+msgstr "호스팅 중지"
+
+#: .\templates\partials\nav.html:9
+msgid "Start Hosting"
+msgstr "호스팅 시작"
+
+#: .\templates\partials\nav.html:14
+msgid "Create Room"
+msgstr "방 만들기"
+
+#: .\templates\partials\nav.html:16
+msgid "Profile"
+msgstr "프로필"
+
+#: .\templates\partials\nav.html:17
+msgid "Logout"
+msgstr "로그아웃"
+
+#: .\templates\partials\nav.html:19
+msgid "Login"
+msgstr "로그인"
+
+#: .\templates\partials\nav.html:20
+msgid "Sign up"
+msgstr "가입하기"
+
+#: .\templates\partials\social_login.html:3
+msgid "Continue with github"
+msgstr "깃허브로 로그인"
+
+#: .\templates\partials\social_login.html:6
+msgid "Continue with kakao"
+msgstr "카카오로 로그인"
+
+#: .\templates\rooms\room_list.html:24
+#, python-format
+msgid "Page %(current_page)s of %(total_pages)s"
+msgstr "%(current_page)s페이지 / %(total_pages)s페이지"
+
+#: .\templates\users\login.html:4
+msgid "Log In"
+msgstr "로그인"
+
+#: .\templates\users\login.html:17
+msgid "Don't have an account?"
+msgstr "아이디가 없으신가욤?.?"
+
+#: .\templates\users\login.html:18
+msgid "Sign up!"
+msgstr "그럼 가입해!"
+
+#: .\users\models.py:25
+msgid "Male"
+msgstr "남성"
+
+#: .\users\models.py:26
+msgid "Female"
+msgstr "여성"
+
+#: .\users\models.py:27
+msgid "Other"
+msgstr "혼종"
+
+#: .\users\models.py:34
+msgid "English"
+msgstr "영어"
+
+#: .\users\models.py:35
+msgid "Korean"
+msgstr "한국어"
+
+#: .\users\models.py:55
+msgid "gender"
+msgstr "성별"
+
+#: .\users\models.py:57
+msgid "bio"
+msgstr "자기소개"
+
+#: .\users\models.py:60
+msgid "language"
+msgstr "언어"
+
+#: .\users\models.py:87
+msgid "Verify Airbnb Account"
+msgstr "칼에베인베인 산에오른오른"

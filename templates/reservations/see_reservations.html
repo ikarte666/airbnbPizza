@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+{{user.first_name}}'s Reservations
+{% endblock page_title %}
+
+{% block content %}
+<div class="container mx-auto text-center">
+    <div class="flex flex-col items-center justify-center">
+        {% include "mixins/user_avatar.html" with user=user %}
+        <h3 class="mb-6 mt-4 text-2xl">{{user.first_name}}'s Reservation list</h3>
+    </div>
+    {% if reservations.count > 0 %}
+        <div class="border-gray-500 border flex flex-wrap">
+        {% for reservation in reservations %}
+            {% include "partials/room_card.html" with room=reservation.room %}
+        {% endfor %}
+        </div>
+    {% else %}
+    <div>You don't have any reservation</div>
+    {% endif %}
+</div>
+{% endblock content %}

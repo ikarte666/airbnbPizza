@@ -1,0 +1,44 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://kit.fontawesome.com/00e4331c95.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
+    <title>{% block page_title %}{% endblock page_title %} | Pbnb</title>
+</head>
+
+<body class="text-gray-800 mt-24 font-light">
+    {% include "partials/messages.html" %}
+    <header class="container max-w-full inset-0 flex justify-between px-6 h-20 border-b border-gray-400 fixed bg-white">
+        <div class="flex items-center w-1/2">
+            <a href="{% url 'core:home' %}" class="mr-6">
+                <img src="{% static 'img/logo.png' %}" class="w-6 " />
+            </a>
+            {% block search-bar %}
+            <form method="get" action="{% url 'rooms:search' %}" class="w-3/6">
+                <input name="city" placeholder="{% trans 'Search by City' %}"
+                    class="search-box search-box-text border px-5 placeholder-gray-600 py-3 rounded-sm w-full shadow-md hover:shadow-lg focus:outline-none" />
+            </form>
+            {% endblock search-bar %}
+        </div>
+        {% include "partials/nav.html" %}
+    </header>
+    {% block content %}{% endblock %}
+    {% include "partials/footer.html" %}
+    <script>
+        const langSelect = document.getElementById("js-lang");
+        const handleLangChange = () => {
+            const selected = langSelect.value;
+            fetch(`{% url 'users:switch_language' %}?lang=${selected}`).then(()=>window.location.reload());
+        }
+        langSelect.addEventListener("change",handleLangChange);
+    </script>
+</body>
+
+</html>

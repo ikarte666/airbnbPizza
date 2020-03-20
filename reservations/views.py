@@ -3,8 +3,11 @@ from django.http import Http404
 from django.views.generic import View
 from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
+from django.contrib.auth.models import AnonymousUser
 from reviews import forms as review_forms
 from rooms import models as room_models
+from users import models as user_models
+from users import mixins
 from . import models
 
 # Create your views here.
@@ -15,6 +18,9 @@ class CreateError(Exception):
 
 
 def create(request, room, year, month, day):
+    if request.user.pk == AnonymousUser.pk:
+        messages.error(request, "You need to log in")
+        return redirect(reverse("core:home"))
     try:
         date_obj = datetime.datetime(year, month, day)
         room = room_models.Room.objects.get(pk=room)
@@ -30,7 +36,8 @@ def create(request, room, year, month, day):
             check_in=date_obj,
             check_out=date_obj + datetime.timedelta(days=1),
         )
-        return redirect(reverse("reservations:detail", kwargs={"pk": reservation.pk}))
+        print(reservation.id)
+        return redirect(reverse("reservations:detail", kwargs={"pk": reservation.id}))
 
 
 class ReservationDetailView(View):
@@ -64,3 +71,14 @@ def edit_reservation(request, pk, verb):
     reservation.save()
     messages.success(request, "Reservation Updated")
     return redirect(reverse("reservations:detail", kwargs={"pk": reservation.pk}))
+
+
+def see_reservations(request, pk):
+    user = user_models.User.objects.get(pk=pk)
+    reservations = models.Reservation.objects.all().filter(guest=user)
+    print(reservations)
+    return render(
+        request,
+        "reservations/see_reservations.html",
+        {"user": user, "reservations": reservations},
+    )
