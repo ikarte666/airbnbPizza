@@ -17,4 +17,5 @@ django-seed
 django==2.2.5
 pillow
 pipenv-to-requirements
+psycopg==2.8.4
 requests
