@@ -11,7 +11,6 @@ from . import models, forms
 def go_conversation(request, a_pk, b_pk):
     user_one = user_models.User.objects.get_or_none(pk=a_pk)
     user_two = user_models.User.objects.get_or_none(pk=b_pk)
-
     if user_one is not None and user_two is not None:
         try:
             conversation = models.Conversation.objects.filter(
@@ -19,10 +18,10 @@ def go_conversation(request, a_pk, b_pk):
             ).filter(participants=user_two)
             conversation = conversation[0]
             print("Complete Get")
-        except models.Conversation.DoesNotExist:
+        except Exception as ex:
             conversation = models.Conversation.objects.create()
             conversation.participants.add(user_one, user_two)
-            print("Complete Create")
+            print(ex)
 
         return redirect(reverse("conversations:detail", kwargs={"pk": conversation.pk}))
 
@@ -48,4 +47,3 @@ class ConversationDetailView(View):
                 message=message, user=self.request.user, conversation=conversation
             )
         return redirect(reverse("conversations:detail", kwargs={"pk": pk}))
-

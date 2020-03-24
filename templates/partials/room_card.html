@@ -1,5 +1,5 @@
-<div class="w-1/4 mb-10 px-2 overflow-hidden">
-    <a href="{% url 'rooms:detail' room.pk %}">
+<div class="{% if on_reservation == 1 %}w-3/4{% else %}w-1/4{% endif %} mb-10 px-2 overflow-hidden">
+    {% if on_reservation != 1 %}<a href="{% url 'rooms:detail' room.pk %}">{% endif %}
         <div class="w-full h-64 bg-cover bg-center rounded-lg mb-2"
             style="background-image: url({{room.first_photo}});">
         </div>

@@ -82,3 +82,11 @@ def see_reservations(request, pk):
         "reservations/see_reservations.html",
         {"user": user, "reservations": reservations},
     )
+
+
+def del_reservations(request, pk):
+    reservations = models.Reservation.objects.all().filter(pk=pk)
+    reservations.delete()
+    messages.success(request, "Reservation has been deleted")
+
+    return redirect("core:home")
